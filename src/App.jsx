@@ -58,7 +58,9 @@ function App() {
         {/* {error && <p>{error}</p>} */}
         {error && (
           <form onSubmit={(e) => e.preventDefault()}>
-            <p htmlFor="location">Please, enter your city</p>
+            <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
+              Please, enter your city
+            </p>
             <input
               id="location"
               value={city}
