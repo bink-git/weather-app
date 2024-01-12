@@ -3,19 +3,6 @@ import './App.css';
 
 function App() {
   const [weather, setWeather] = useState(null);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await fetch(
-  //       `https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=6d0c694d48573d4cf670244cd6870ab3&units=metric`
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setWeather(data);
-  //   }
-  //   fetchData();
-  // }, []);
-
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -31,6 +18,7 @@ function App() {
           fetch(apiUrl)
             .then((response) => response.json())
             .then((data) => {
+              console.log(data);
               setWeather(data);
             })
             .catch((error) => {
@@ -51,11 +39,21 @@ function App() {
   return (
     <>
       <div className="card">
+        {error && <p>{error}</p>}
         {weather && (
           <>
-            <h1>{weather.name}</h1>
+            <h1>
+              {weather.name}, {weather.sys.country}
+            </h1>
             <p>Temperature: {Math.round(weather.main.temp)}°C</p>
             <p>Humidity: {Math.round(weather.main.humidity)}%</p>
+            <div className="weather">
+              <p>Weather: {weather.weather[0].main}</p>
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                alt="icon"
+              />
+            </div>
           </>
         )}
       </div>
