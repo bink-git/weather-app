@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { apiKey } from './constants.js';
 import './App.css';
 
 function App() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
+  const [city, setCity] = useState('');
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -12,7 +14,6 @@ function App() {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          const apiKey = '6d0c694d48573d4cf670244cd6870ab3';
           const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
           fetch(apiUrl)
@@ -26,6 +27,7 @@ function App() {
               console.error('Error fetching weather data:', error);
             });
         },
+
         function (error) {
           setError('Error getting location');
           console.error('Error getting location:', error);
@@ -36,10 +38,35 @@ function App() {
     }
   }, []);
 
+  const searchCity = () => {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setWeather(data);
+      })
+      .catch((error) => {
+        setError('Error fetching weather data');
+        console.error('Error fetching weather data:', error);
+      });
+    setCity('');
+  };
+
   return (
     <>
       <div className="card">
-        {error && <p>{error}</p>}
+        {/* {error && <p>{error}</p>} */}
+        {error && (
+          <form onSubmit={(e) => e.preventDefault()}>
+            <p htmlFor="location">Please, enter your city</p>
+            <input
+              id="location"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <button onClick={searchCity}>Search</button>
+          </form>
+        )}
         {weather && (
           <>
             <h1>
@@ -48,7 +75,7 @@ function App() {
             <p>Temperature: {Math.round(weather.main.temp)}°C</p>
             <p>Humidity: {Math.round(weather.main.humidity)}%</p>
             <div className="weather">
-              <p>Weather: {weather.weather[0].main}</p>
+              <p>{weather.weather[0].main}</p>
               <img
                 src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                 alt="icon"
