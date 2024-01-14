@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 import { apiKey } from './constants.js';
 import './App.css';
+import WeatherCard from './WeatherCard.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [city, setCity] = useState('');
+  const [forecast, setForecast] = useState(null);
+
+  let dateTime;
+  let temperature;
+  let weatherCondition;
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -40,7 +46,6 @@ function App() {
 
   const searchCity = () => {
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    // setError('');
 
     fetch(apiUrl)
       .then((response) => {
@@ -51,6 +56,7 @@ function App() {
       })
       .then((data) => {
         setWeather(data);
+
         setError('');
       })
       .catch((error) => {
@@ -66,6 +72,27 @@ function App() {
       });
   };
 
+  const forecastSearch = (city) => {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error fetching forecast data');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setForecast(data);
+        setError('');
+      })
+      .catch((error) => console.error('Error fetching weather data:', error));
+  };
+
+  useEffect(() => {
+    forecastSearch(city);
+  }, [city]);
+
   return (
     <>
       <div className="card">
@@ -76,9 +103,9 @@ function App() {
             <h1>
               {weather.name}, {weather.sys.country}
             </h1>
-            <p>Temperature: {Math.round(weather.main.temp)}°C</p>
-            <p>Humidity: {Math.round(weather.main.humidity)}%</p>
             <div className="weather">
+              <p>Temperature: {Math.round(weather.main.temp)}°C</p>
+              <p>Humidity: {Math.round(weather.main.humidity)}%</p>
               <p>{weather.weather[0].main}</p>
               <img
                 src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
@@ -87,17 +114,24 @@ function App() {
             </div>
           </>
         ) : (
-          <form onSubmit={(e) => e.preventDefault()}>
-            <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-              Please, enter your city
-            </p>
-            <input
-              id="location"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <button onClick={searchCity}>Search</button>
-          </form>
+          <>
+            <form onSubmit={(e) => e.preventDefault()} className="form">
+              <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
+                Please, enter your city
+              </p>
+              <input
+                id="location"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              <button onClick={searchCity}>Search</button>
+            </form>
+
+            {forecast &&
+              forecast.list.map((item, index) => (
+                <WeatherCard key={index} item={item} />
+              ))}
+          </>
         )}
       </div>
     </>
