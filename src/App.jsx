@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { apiKey } from './constants.js';
-import './App.css';
+import { forecastUrl } from './constants.js';
+
 import WeatherCard from './WeatherCard.jsx';
+import './App.css';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -56,7 +58,6 @@ function App() {
       })
       .then((data) => {
         setWeather(data);
-
         setError('');
       })
       .catch((error) => {
@@ -73,9 +74,7 @@ function App() {
   };
 
   const forecastSearch = (city) => {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
-
-    fetch(apiUrl)
+    fetch(`${forecastUrl}${city}&appid=${apiKey}&units=metric`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error fetching forecast data');
@@ -83,7 +82,12 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setForecast(data);
+        console.log(
+          data.list.filter((item) => item.dt_txt.includes('12:00:00'))
+        );
+        setForecast(
+          data.list.filter((item) => item.dt_txt.includes('12:00:00'))
+        );
         setError('');
       })
       .catch((error) => console.error('Error fetching weather data:', error));
@@ -127,10 +131,18 @@ function App() {
               <button onClick={searchCity}>Search</button>
             </form>
 
-            {forecast &&
-              forecast.list.map((item, index) => (
-                <WeatherCard key={index} item={item} />
-              ))}
+            {
+              forecast && (
+                <div className="cards">
+                  {forecast.map((item, index) => (
+                    <WeatherCard key={index} item={item} />
+                  ))}
+                </div>
+              )
+              // forecast.map((item, index) => (
+              //   <WeatherCard key={index} item={item} />
+              // ))
+            }
           </>
         )}
       </div>

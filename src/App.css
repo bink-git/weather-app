@@ -27,11 +27,23 @@
   font-size: 14px;
 }
 
+.info span {
+  font-weight: 700;
+  font-size: 40px;
+  display: block;
+}
+
 .form {
   margin-bottom: 40px;
 }
 
 .cards {
   display: flex;
-  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.date {
+  margin-bottom: 20px;
 }
