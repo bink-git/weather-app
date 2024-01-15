@@ -2,7 +2,7 @@ import React from 'react';
 
 const WeatherCard = ({ item }) => {
   return (
-    <div className="weather">
+    <div className="weather-card">
       <p className="date">{item.dt_txt.split(' ')[0]}</p>
       {/* <p>{item.dt_txt.split(' ')[1]}</p> */}
       <div className="info">
