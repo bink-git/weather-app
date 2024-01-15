@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { apiKey } from './constants.js';
-import { forecastUrl } from './constants.js';
+import { API_KEY } from './constants.js';
+import { API_URL } from './constants.js';
+import { FORECAST_URL } from './constants.js';
 
 import WeatherCard from './WeatherCard.jsx';
+import cities from 'cities.json';
 import './App.css';
 
 function App() {
@@ -22,12 +24,11 @@ function App() {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+          const apiUrl = `${API_URL}lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
 
           fetch(apiUrl)
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
               setWeather(data);
             })
             .catch((error) => {
@@ -47,7 +48,7 @@ function App() {
   }, []);
 
   const searchCity = () => {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const apiUrl = `${API_URL}q=${city}&appid=${API_KEY}&units=metric`;
 
     fetch(apiUrl)
       .then((response) => {
@@ -74,7 +75,7 @@ function App() {
   };
 
   const forecastSearch = (city) => {
-    fetch(`${forecastUrl}${city}&appid=${apiKey}&units=metric`)
+    fetch(`${FORECAST_URL}${city}&appid=${API_KEY}&units=metric`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error fetching forecast data');
@@ -82,11 +83,8 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(
-          data.list.filter((item) => item.dt_txt.includes('12:00:00'))
-        );
         setForecast(
-          data.list.filter((item) => item.dt_txt.includes('12:00:00'))
+          data.list.filter((item) => item.dt_txt.includes('00:00:00'))
         );
         setError('');
       })
@@ -127,22 +125,18 @@ function App() {
                 id="location"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+                // onChange={handleInputChange}
               />
               <button onClick={searchCity}>Search</button>
             </form>
 
-            {
-              forecast && (
-                <div className="cards">
-                  {forecast.map((item, index) => (
-                    <WeatherCard key={index} item={item} />
-                  ))}
-                </div>
-              )
-              // forecast.map((item, index) => (
-              //   <WeatherCard key={index} item={item} />
-              // ))
-            }
+            {forecast && (
+              <div className="cards">
+                {forecast.map((item, index) => (
+                  <WeatherCard key={index} item={item} />
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

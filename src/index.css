@@ -40,6 +40,8 @@ input {
   border: 1px solid #ccc;
   font-size: 1.2em;
   margin-bottom: 20px;
+  display: block;
+  margin: 0 auto;
 }
 
 button {
@@ -50,4 +52,5 @@ button {
   border-radius: 5px;
   font-size: 1.2em;
   cursor: pointer;
+  margin-top: 20px;
 }
