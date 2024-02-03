@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { apiKey } from './constants.js';
 import './App.css';
+import CityAutocomplete from './CityFind.jsx';
+import VariantDisplayComponent from './VariantDisplay.jsx';
+import AutocompleteComponent from './AutoComplete.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -91,6 +94,9 @@ function App() {
             <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
               Please, enter your city
             </p>
+            {/* <CityAutocomplete /> */}
+            {/* <VariantDisplayComponent /> */}
+            <AutocompleteComponent />
             <input
               id="location"
               value={city}
