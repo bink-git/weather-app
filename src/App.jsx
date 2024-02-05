@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { API_KEY } from './constants.js';
 import { API_URL } from './constants.js';
@@ -6,11 +6,8 @@ import { FORECAST_URL } from './constants.js';
 
 import WeatherCard from './WeatherCard.jsx';
 import cities from 'cities.json';
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import './App.css';
-import CityAutocomplete from './CityFind.jsx';
-import VariantDisplayComponent from './VariantDisplay.jsx';
-import AutocompleteComponent from './AutoComplete.jsx';
-import CitySearch from './CitySearch.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -18,9 +15,37 @@ function App() {
   const [city, setCity] = useState('');
   const [forecast, setForecast] = useState(null);
 
-  let dateTime;
-  let temperature;
-  let weatherCondition;
+  const newCities = cities.map((city) => {
+    return {
+      id: `${city.lat}${city.lng}`,
+      name: city.name,
+    };
+  });
+
+  const handleOnSearch = (string, results) => {
+    // onSearch will have as the first callback parameter
+    // the string searched and for the second the results.
+    console.log(string, results);
+  };
+
+  const handleOnHover = (result) => {
+    // the item hovered
+    console.log(result);
+  };
+
+  const handleOnSelect = (item) => {
+    // the item selected
+    setCity(item.name);
+    console.log(item);
+  };
+
+  const formatResult = (item) => {
+    return (
+      <>
+        <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
+      </>
+    );
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -101,6 +126,10 @@ function App() {
     forecastSearch();
   }, [city]);
 
+  useEffect(() => {
+    searchCity();
+  }, [city]);
+
   return (
     <>
       <div className="card">
@@ -108,7 +137,22 @@ function App() {
 
         {weather ? (
           <>
-            <form onSubmit={(e) => e.preventDefault()} className="form">
+            <p htmlFor="location" className="form-title">
+              Please, enter your city
+            </p>
+            <div style={{ width: 400 }}>
+              <ReactSearchAutocomplete
+                items={newCities}
+                onSearch={handleOnSearch}
+                onHover={handleOnHover}
+                onSelect={handleOnSelect}
+                autoFocus
+                formatResult={formatResult}
+                resultStringKeyName="name"
+              />
+            </div>
+            <button onClick={() => searchCity()}>Search</button>
+            {/* <form onSubmit={(e) => e.preventDefault()} className="form">
               <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
                 Please, enter your city
               </p>
@@ -118,7 +162,7 @@ function App() {
                 onChange={(e) => setCity(e.target.value)}
               />
               <button onClick={() => searchCity()}>Search</button>
-            </form>
+            </form> */}
 
             <h1>
               {weather.name}, {weather.sys.country}
@@ -144,22 +188,21 @@ function App() {
           </>
         ) : (
           <>
-            <form onSubmit={(e) => e.preventDefault()} className="form">
-              <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-                Please, enter your city
-              </p>
-              {/* <CityAutocomplete /> */}
-              {/* <VariantDisplayComponent /> */}
-              {/* <AutocompleteComponent /> */}
-              <CitySearch />
-              <input
-                id="location"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Enter your city"
+            <p htmlFor="location" className="form-title">
+              Please, enter your city
+            </p>
+            <div style={{ width: 400 }}>
+              <ReactSearchAutocomplete
+                items={newCities}
+                onSearch={handleOnSearch}
+                onHover={handleOnHover}
+                onSelect={handleOnSelect}
+                autoFocus
+                formatResult={formatResult}
+                resultStringKeyName="name"
               />
-              <button onClick={() => searchCity()}>Search</button>
-            </form>
+            </div>
+            <button onClick={() => searchCity()}>Search</button>
           </>
         )}
       </div>
