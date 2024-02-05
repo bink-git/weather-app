@@ -6,6 +6,10 @@ import { FORECAST_URL } from './constants.js';
 import WeatherCard from './WeatherCard.jsx';
 import cities from 'cities.json';
 import './App.css';
+import CityAutocomplete from './CityFind.jsx';
+import VariantDisplayComponent from './VariantDisplay.jsx';
+import AutocompleteComponent from './AutoComplete.jsx';
+import CitySearch from './CitySearch.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -139,6 +143,7 @@ function App() {
             )}
           </>
         ) : (
+
           <>
             <form onSubmit={(e) => e.preventDefault()} className="form">
               <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
@@ -153,6 +158,24 @@ function App() {
               <button onClick={() => searchCity()}>Search</button>
             </form>
           </>
+=======
+          <form onSubmit={(e) => e.preventDefault()}>
+            <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
+              Please, enter your city
+            </p>
+            {/* <CityAutocomplete /> */}
+            {/* <VariantDisplayComponent /> */}
+            {/* <AutocompleteComponent /> */}
+            <CitySearch />
+            <input
+              id="location"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Enter your city"
+            />
+            <button onClick={searchCity}>Search</button>
+          </form>
+
         )}
       </div>
     </>
