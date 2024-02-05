@@ -4,6 +4,7 @@ import './App.css';
 import CityAutocomplete from './CityFind.jsx';
 import VariantDisplayComponent from './VariantDisplay.jsx';
 import AutocompleteComponent from './AutoComplete.jsx';
+import CitySearch from './CitySearch.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -96,11 +97,13 @@ function App() {
             </p>
             {/* <CityAutocomplete /> */}
             {/* <VariantDisplayComponent /> */}
-            <AutocompleteComponent />
+            {/* <AutocompleteComponent /> */}
+            <CitySearch />
             <input
               id="location"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              placeholder="Enter your city"
             />
             <button onClick={searchCity}>Search</button>
           </form>
