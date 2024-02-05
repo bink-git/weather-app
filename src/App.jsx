@@ -5,8 +5,9 @@ import { API_URL } from './constants.js';
 import { FORECAST_URL } from './constants.js';
 
 import WeatherCard from './WeatherCard.jsx';
+import SearchCity from './SearchCity.jsx';
 import cities from 'cities.json';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+
 import './App.css';
 
 function App() {
@@ -21,31 +22,6 @@ function App() {
       name: city.name,
     };
   });
-
-  const handleOnSearch = (string, results) => {
-    // onSearch will have as the first callback parameter
-    // the string searched and for the second the results.
-    console.log(string, results);
-  };
-
-  const handleOnHover = (result) => {
-    // the item hovered
-    console.log(result);
-  };
-
-  const handleOnSelect = (item) => {
-    // the item selected
-    setCity(item.name);
-    console.log(item);
-  };
-
-  const formatResult = (item) => {
-    return (
-      <>
-        <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-      </>
-    );
-  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -126,10 +102,6 @@ function App() {
     forecastSearch();
   }, [city]);
 
-  useEffect(() => {
-    searchCity();
-  }, [city]);
-
   return (
     <>
       <div className="card">
@@ -137,32 +109,11 @@ function App() {
 
         {weather ? (
           <>
-            <p htmlFor="location" className="form-title">
-              Please, enter your city
-            </p>
-            <div style={{ width: 400 }}>
-              <ReactSearchAutocomplete
-                items={newCities}
-                onSearch={handleOnSearch}
-                onHover={handleOnHover}
-                onSelect={handleOnSelect}
-                autoFocus
-                formatResult={formatResult}
-                resultStringKeyName="name"
-              />
-            </div>
-            <button onClick={() => searchCity()}>Search</button>
-            {/* <form onSubmit={(e) => e.preventDefault()} className="form">
-              <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-                Please, enter your city
-              </p>
-              <input
-                id="location"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              />
-              <button onClick={() => searchCity()}>Search</button>
-            </form> */}
+            <SearchCity
+              newCities={newCities}
+              setCity={setCity}
+              searchCity={searchCity}
+            />
 
             <h1>
               {weather.name}, {weather.sys.country}
@@ -187,23 +138,11 @@ function App() {
             )}
           </>
         ) : (
-          <>
-            <p htmlFor="location" className="form-title">
-              Please, enter your city
-            </p>
-            <div style={{ width: 400 }}>
-              <ReactSearchAutocomplete
-                items={newCities}
-                onSearch={handleOnSearch}
-                onHover={handleOnHover}
-                onSelect={handleOnSelect}
-                autoFocus
-                formatResult={formatResult}
-                resultStringKeyName="name"
-              />
-            </div>
-            <button onClick={() => searchCity()}>Search</button>
-          </>
+          <SearchCity
+            newCities={newCities}
+            setCity={setCity}
+            searchCity={searchCity}
+          />
         )}
       </div>
     </>
