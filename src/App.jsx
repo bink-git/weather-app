@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import { API_KEY } from './constants.js';
 import { API_URL } from './constants.js';
@@ -115,7 +116,6 @@ function App() {
                 id="location"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                // onChange={handleInputChange}
               />
               <button onClick={() => searchCity()}>Search</button>
             </form>
@@ -143,39 +143,24 @@ function App() {
             )}
           </>
         ) : (
-
           <>
             <form onSubmit={(e) => e.preventDefault()} className="form">
               <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
                 Please, enter your city
               </p>
+              {/* <CityAutocomplete /> */}
+              {/* <VariantDisplayComponent /> */}
+              {/* <AutocompleteComponent /> */}
+              <CitySearch />
               <input
                 id="location"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                // onChange={handleInputChange}
+                placeholder="Enter your city"
               />
               <button onClick={() => searchCity()}>Search</button>
             </form>
           </>
-=======
-          <form onSubmit={(e) => e.preventDefault()}>
-            <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-              Please, enter your city
-            </p>
-            {/* <CityAutocomplete /> */}
-            {/* <VariantDisplayComponent /> */}
-            {/* <AutocompleteComponent /> */}
-            <CitySearch />
-            <input
-              id="location"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Enter your city"
-            />
-            <button onClick={searchCity}>Search</button>
-          </form>
-
         )}
       </div>
     </>
