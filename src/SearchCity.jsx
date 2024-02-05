@@ -26,7 +26,7 @@ const SearchCity = ({ newCities, setCity, searchCity }) => {
   return (
     <div className="search">
       <p className="form-title">Please, enter your city</p>
-      <div style={{ width: 400 }}>
+      <div>
         <ReactSearchAutocomplete
           items={newCities}
           onSearch={handleOnSearch}
@@ -35,6 +35,9 @@ const SearchCity = ({ newCities, setCity, searchCity }) => {
           autoFocus
           formatResult={formatResult}
           resultStringKeyName="name"
+          styling={{
+            maxWidth: '400px',
+          }}
         />
       </div>
       <button onClick={searchCity}>Search</button>
