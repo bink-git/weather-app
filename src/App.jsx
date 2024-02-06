@@ -14,7 +14,7 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [city, setCity] = useState('');
-  const [forecast, setForecast] = useState(null);
+  const [forecast, setForecast] = useState([]);
 
   const newCities = cities.map((city) => {
     return {
