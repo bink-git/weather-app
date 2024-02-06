@@ -21,6 +21,8 @@ function App() {
     return {
       id: `${city.lat}${city.lng}`,
       name: city.name,
+      country: city.country,
+      region1: city.admin1,
     };
   });
 

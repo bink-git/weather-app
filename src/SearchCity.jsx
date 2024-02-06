@@ -1,4 +1,6 @@
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import { getName } from 'country-list';
+
 const SearchCity = ({ newCities, setCity, searchCity }) => {
   const handleOnSelect = (item) => {
     setCity(item.name);
@@ -7,7 +9,9 @@ const SearchCity = ({ newCities, setCity, searchCity }) => {
   const formatResult = (item) => {
     return (
       <>
-        <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
+        <span style={{ display: 'block', textAlign: 'left' }}>
+          {item.name}, {getName(item.country)}
+        </span>
       </>
     );
   };
