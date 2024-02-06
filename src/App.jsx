@@ -1,21 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { API_KEY } from './constants.js';
 import { API_URL } from './constants.js';
 import { FORECAST_URL } from './constants.js';
 
 import WeatherCard from './WeatherCard.jsx';
+import SearchCity from './SearchCity.jsx';
 import cities from 'cities.json';
+
 import './App.css';
+import CurrentWeather from './CurrentWeather.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [city, setCity] = useState('');
-  const [forecast, setForecast] = useState(null);
+  const [forecast, setForecast] = useState([]);
 
-  let dateTime;
-  let temperature;
-  let weatherCondition;
+  const newCities = cities.map((city) => {
+    return {
+      id: `${city.lat}${city.lng}`,
+      name: city.name,
+    };
+  });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -59,6 +66,7 @@ function App() {
       })
       .then((data) => {
         setWeather(data);
+        forecastSearch();
         setError('');
       })
       .catch((error) => {
@@ -92,10 +100,6 @@ function App() {
       .catch((error) => console.error('Error fetching weather data:', error));
   };
 
-  useEffect(() => {
-    forecastSearch();
-  }, [city]);
-
   return (
     <>
       <div className="card">
@@ -103,32 +107,13 @@ function App() {
 
         {weather ? (
           <>
-            <form onSubmit={(e) => e.preventDefault()} className="form">
-              <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-                Please, enter your city
-              </p>
-              <input
-                id="location"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                // onChange={handleInputChange}
-              />
-              <button onClick={() => searchCity()}>Search</button>
-            </form>
+            <SearchCity
+              newCities={newCities}
+              setCity={setCity}
+              searchCity={searchCity}
+            />
 
-            <h1>
-              {weather.name}, {weather.sys.country}
-            </h1>
-            <div className="weather">
-              <p>Current weather:</p>
-              <p>Temperature: {Math.round(weather.main.temp)}°C</p>
-              <p>Humidity: {Math.round(weather.main.humidity)}%</p>
-              <p>{weather.weather[0].main}</p>
-              <img
-                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                alt="icon"
-              />
-            </div>
+            <CurrentWeather weather={weather} />
 
             {forecast && (
               <div className="cards">
@@ -139,20 +124,11 @@ function App() {
             )}
           </>
         ) : (
-          <>
-            <form onSubmit={(e) => e.preventDefault()} className="form">
-              <p htmlFor="location" style={{ fontSize: '1.8rem' }}>
-                Please, enter your city
-              </p>
-              <input
-                id="location"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                // onChange={handleInputChange}
-              />
-              <button onClick={() => searchCity()}>Search</button>
-            </form>
-          </>
+          <SearchCity
+            newCities={newCities}
+            setCity={setCity}
+            searchCity={searchCity}
+          />
         )}
       </div>
     </>
