@@ -9,6 +9,7 @@ import SearchCity from './SearchCity.jsx';
 import cities from 'cities.json';
 
 import './App.css';
+import CurrentWeather from './CurrentWeather.jsx';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -65,6 +66,7 @@ function App() {
       })
       .then((data) => {
         setWeather(data);
+        forecastSearch();
         setError('');
       })
       .catch((error) => {
@@ -98,10 +100,6 @@ function App() {
       .catch((error) => console.error('Error fetching weather data:', error));
   };
 
-  useEffect(() => {
-    forecastSearch();
-  }, [city]);
-
   return (
     <>
       <div className="card">
@@ -115,19 +113,7 @@ function App() {
               searchCity={searchCity}
             />
 
-            <h1>
-              {weather.name}, {weather.sys.country}
-            </h1>
-            <div className="weather">
-              <p>Current weather:</p>
-              <p>Temperature: {Math.round(weather.main.temp)}°C</p>
-              <p>Humidity: {Math.round(weather.main.humidity)}%</p>
-              <p>{weather.weather[0].main}</p>
-              <img
-                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                alt="icon"
-              />
-            </div>
+            <CurrentWeather weather={weather} />
 
             {forecast && (
               <div className="cards">
