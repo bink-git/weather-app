@@ -1,8 +1,10 @@
+import { getName } from 'country-list';
 const CurrentWeather = ({ weather }) => {
+  console.log(weather);
   return (
     <>
       <h1>
-        {weather.name}, {weather.sys.country}
+        {weather.name}, {getName(weather.sys.country)}
       </h1>
       <div className="weather">
         <p>Current weather:</p>

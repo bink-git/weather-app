@@ -16,6 +16,7 @@ function App() {
   const [error, setError] = useState(null);
   const [city, setCity] = useState('');
   const [forecast, setForecast] = useState([]);
+  const [country, setCountry] = useState('');
 
   const newCities = cities.map((city) => {
     return {
@@ -24,6 +25,20 @@ function App() {
       country: city.country,
       region1: city.admin1,
     };
+  });
+
+  const uniqueCityNames = new Set();
+
+  // Filter out duplicate cities based on their names
+  const uniqueNewCities = newCities.filter((city) => {
+    // Check if the city name is already in the Set
+    if (!uniqueCityNames.has(city.name)) {
+      // If not, add it to the Set and return true to keep this city
+      uniqueCityNames.add(city.name);
+      return true;
+    }
+    // If the city name is already in the Set, return false to filter it out
+    return false;
   });
 
   useEffect(() => {
@@ -57,7 +72,7 @@ function App() {
   }, []);
 
   const searchCity = () => {
-    const apiUrl = `${API_URL}q=${city}&appid=${API_KEY}&units=metric`;
+    const apiUrl = `${API_URL}q=${city},${country}&appid=${API_KEY}&units=metric`;
 
     fetch(apiUrl)
       .then((response) => {
@@ -110,9 +125,10 @@ function App() {
         {weather ? (
           <>
             <SearchCity
-              newCities={newCities}
+              newCities={uniqueNewCities}
               setCity={setCity}
               searchCity={searchCity}
+              setCountry={setCountry}
             />
 
             <CurrentWeather weather={weather} />
@@ -127,9 +143,10 @@ function App() {
           </>
         ) : (
           <SearchCity
-            newCities={newCities}
+            newCities={uniqueNewCities}
             setCity={setCity}
             searchCity={searchCity}
+            setCountry={setCountry}
           />
         )}
       </div>
