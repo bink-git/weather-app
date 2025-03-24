@@ -3,19 +3,13 @@ const WeatherCard = ({ item }) => {
     <div className="weather-card">
       <p className="date">{item.dt_txt.split(' ')[0]}</p>
       <div className="info">
-        <p>
-          Temperature:
-          <span>{Math.round(item.main.temp)}°C</span>
-        </p>
-        <p>
-          Humidity:
-          <span>{Math.round(item.main.humidity)}%</span>
-        </p>
-        <p>{item.weather[0].main}</p>
         <img
-          src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
+          src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`}
           alt="icon"
         />
+        <p>
+          <span>{Math.round(item.main.temp)}°C</span>
+        </p>
       </div>
     </div>
   );

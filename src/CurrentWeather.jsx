@@ -6,13 +6,11 @@ const CurrentWeather = ({ weather }) => {
       </h1>
       <div className="weather">
         <p>Current weather:</p>
-        <p>Temperature: {Math.round(weather.main.temp)}°C</p>
-        <p>Humidity: {Math.round(weather.main.humidity)}%</p>
-        <p>{weather.weather[0].main}</p>
         <img
-          src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+          src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
           alt="icon"
         />
+        <p>{Math.round(weather.main.temp)}°C</p>
       </div>
     </>
   );
